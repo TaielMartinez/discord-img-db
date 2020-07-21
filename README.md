@@ -1,2 +1,2 @@
 # discord-img-db
-User discord bot whit a img server
+use discord as image database

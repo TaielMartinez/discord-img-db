@@ -1,57 +1,119 @@
-const express = require("express");
-const app = express();
-const morgan = require("morgan");
-const bodyParser = require("body-parser");
-const mongoose = require("mongoose");
+var Discord = require('discord.js');
+var bot = new Discord.Client();
 
-const productRoutes = require("./api/routes/products");
-const orderRoutes = require("./api/routes/orders");
+const fs = require('fs');
+const path = require("path");
+require('dotenv').config();
+var bodyParser = require('body-parser')
+const CHANNEL = '735124659233882150'
 
-mongoose.connect(
-  "mongodb://node-shop:" +
-    process.env.MONGO_ATLAS_PW +
-    "@node-rest-shop-shard-00-00-wovcj.mongodb.net:27017,node-rest-shop-shard-00-01-wovcj.mongodb.net:27017,node-rest-shop-shard-00-02-wovcj.mongodb.net:27017/test?ssl=true&replicaSet=node-rest-shop-shard-0&authSource=admin",
-  {
-    useMongoClient: true
-  }
-);
-mongoose.Promise = global.Promise;
 
-app.use(morgan("dev"));
-app.use('/uploads', express.static('uploads'));
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
 
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-  );
-  if (req.method === "OPTIONS") {
-    res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
-    return res.status(200).json({});
-  }
-  next();
-});
+const express = require('express')
+const app = express()
+var channel
 
-// Routes which should handle requests
-app.use("/products", productRoutes);
-app.use("/orders", orderRoutes);
+//app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use((req, res, next) => {
-  const error = new Error("Not found");
-  error.status = 404;
-  next(error);
-});
+app.listen(process.env.PORT || 3009, function(){
+    console.log('-')
+    console.log('-')
+    console.log('-')
+    console.log('-')
+    console.log('-')
+    console.log('-')
+    console.log('-')
+    console.log('-')
+    console.log('-')
+    console.log('-')
+    console.log('-')
+    console.log('-')
+    console.log('-')
+	console.log("Server on");
+})
 
-app.use((error, req, res, next) => {
-  res.status(error.status || 500);
-  res.json({
-    error: {
-      message: error.message
+app.use(bodyParser.urlencoded({ extended: false }))
+
+
+app.get('/', function(req, res) {
+    if(channel){
+        extDetect((file) => {
+            channel.send('', {
+                files: [
+                    "./"+file
+                ]
+            })
+            .then((msg) => {
+                console.log(msg.attachments.Collections)
+                /*
+                bot.channels.cache.get(CHANNEL).fetchMessages({ limit: 1 }).then(messages => {
+                    let lastMessage = messages.first();
+                    if (lastMessage.author.bot) {
+                      console.log('b')
+                      console.log(message.attachments)
+                    }
+                  })
+                  .catch(console.error);
+                  */
+            })
+        })
+        res.send('listo perri')
     }
-  });
-});
+    console.log('no cargado')
+})
 
-module.exports = app;
+
+bot.on('ready', client => {
+    channel =  bot.channels.cache.get(CHANNEL)
+})
+
+bot.login(process.env.DISCORD_TOKEN);
+
+
+const directoryPath = path.join(__dirname);
+
+function extDetect(callback){
+    let resultado
+    fs.readdir(directoryPath, function (err, files) {
+        if (err) {
+            return console.log('Unable to scan directory: ' + err);
+        }
+        files.forEach(function (file) {
+            if(!resultado){
+                //console.log('--')
+                //console.log(file.split('newname').length)
+                if(file.split('newname').length === 2) {
+                    //console.log('----------------- '+ file)
+                    callback(file)
+                }
+            }
+            
+        });
+    })
+}
+
+
+function readFile(srcPath) {
+    return new Promise(function (resolve, reject) {
+        fs.readFile(srcPath, 'utf8', function (err, data) {
+            if (err) {
+                reject(err)
+            } else {
+                resolve(data);
+            }
+        });
+    })
+}
+
+function writeFile(savPath, data) {
+    return new Promise(function (resolve, reject) {
+        fs.writeFile(savPath, data, function (err) {
+            if (err) {
+                reject(err)
+            } else {
+                resolve();
+            }
+        });
+    })
+}
+

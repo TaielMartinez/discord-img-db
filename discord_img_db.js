@@ -1,23 +1,27 @@
-var Discord = require('discord.js');
-var bot = new Discord.Client();
+var Discord = require('discord.js')
+var bot = new Discord.Client()
 
-const fs = require('fs');
-require('dotenv').config();
+const fs = require('fs')
+require('dotenv').config()
 var bodyParser = require('body-parser')
-const CHANNEL = '735124659233882150'
+const CHANNEL = process.env.CHANNEL
 
-const express = require('express');
+const express = require('express')
 const app = express()
 var channel
 
-//app.use(bodyParser.urlencoded({ extended: true }));
+//app.use(bodyParser.urlencoded({ extended: true }))
 
 app.listen(process.env.PORT || 3009, function(){
-	console.log("Server on");
+	console.log("Server on")
 })
 
 app.use(bodyParser.json({limit: '8mb', extended: true}))
 app.use(bodyParser.urlencoded({limit: '8mb', extended: true}))
+
+app.get('/', function(req, res) {
+    res.send('Headder: "application/x-www-form-urlencoded" Body: ext-> "png", "jpg", etc y img-> "data:image/png;base64,iVBORw0KGiYdEiaBI0f..."')
+})
 
 app.post('/', function(req, res) {
 

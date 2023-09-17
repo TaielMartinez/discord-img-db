@@ -62,7 +62,7 @@ app.post('/', function(req, res) {
 })
 
 bot.on('ready', client => {
-    channel =  bot.channels.cache.get(process.env.CHANNEL)
+    channel = bot.channels.cache.get(process.env.CHANNEL)
 })
 
 bot.login(process.env.DISCORD_TOKEN)

@@ -1,0 +1,9 @@
+# Spacefile Docs: https://go.deta.dev/docs/spacefile/v0
+v: 0
+micros:
+  - name: discord-img-db
+    src: ./
+    engine: nodejs16
+    primary: true
+    run: node discord_img_db.js
+    dev: nodemon discord_img_db.js

@@ -4,7 +4,6 @@ var bot = new Discord.Client()
 const fs = require('fs')
 require('dotenv').config()
 var bodyParser = require('body-parser')
-const CHANNEL = process.env.CHANNEL
 
 const express = require('express')
 const app = express()
@@ -63,7 +62,7 @@ app.post('/', function(req, res) {
 })
 
 bot.on('ready', client => {
-    channel =  bot.channels.cache.get(CHANNEL)
+    channel =  bot.channels.cache.get(process.env.CHANNEL)
 })
 
 bot.login(process.env.DISCORD_TOKEN)

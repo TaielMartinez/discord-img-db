@@ -7,3 +7,10 @@ micros:
     primary: true
     run: node discord_img_db.js
     dev: nodemon discord_img_db.js
+    presets:
+      api_keys: true
+      env:
+        - name: DISCORD_TOKEN
+        - name: CHANNEL
+    public_routes:
+      - "/*"
